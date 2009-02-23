@@ -23,6 +23,7 @@ Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/%{name}-%{version}.tar
 Patch0:		mysql-workbench-avoid-version_fix.diff
 Patch1:		mysql-workbench-5.1.5-fix-str-fmt.patch
 Obsoletes:	mysql-workbench < 5.1.6
+Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
 BuildRequires:	cairo-devel
 BuildRequires:	ctemplate-devel
