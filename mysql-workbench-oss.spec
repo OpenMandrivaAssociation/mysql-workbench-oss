@@ -15,7 +15,7 @@ Summary:	Extensible modeling tool for MySQL 5.0
 Name:		mysql-workbench-oss
 Group:		Databases
 Version:	5.1.7
-Release:	%mkrel 0.1
+Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
@@ -84,10 +84,6 @@ least 16MB of memory.
 %patch0 -p1
 %patch1 -p1
 
-# create missing required file
-#mkdir -p testing/tut
-#touch testing/tut/Params.inc.in
-
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
@@ -98,28 +94,12 @@ NOCONFIGURE=yes ./autogen.sh
 %endif
 
 %configure2_5x
-# \
-#    --localstatedir=/var/lib \
-#%if %{build_java}
-#    --enable-java-modules \
-#    --with-java-includes=%{java_home}/include \
-#%endif
-#    --disable-php-modules \
-#    --enable-python-modules \
-#    --with-bonobo \
-#    --enable-fastcgi \
-#    --enable-readline \
-#    --enable-canvas \
-#    --enable-se
 
 # antibork
 find -type f -name Makefile | xargs perl -pi -e "s|-Wl,--as-needed||g"
 
 # use the shared libs
 find -type f -name Makefile | xargs perl -pi -e "s|%{_libdir}/python%{pyver}/config/libpython%{pyver}.a|-lpython%{pyver}|g"
-
-# --enable-php-modules requires the embedded static libphp5.a
-#find -type f -name Makefile | xargs perl -pi -e "s|/usr/lib/php5/lib/libphp5.a -L%{_libdir}/php/extensions|-lphp5_common|g"
 
 %make
 
