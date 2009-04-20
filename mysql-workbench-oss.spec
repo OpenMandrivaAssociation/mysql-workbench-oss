@@ -14,14 +14,13 @@
 Summary:	Extensible modeling tool for MySQL 5.0
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.1.7
+Version:	5.1.10
 Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
 Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/%{name}-%{version}.tar.gz
-Patch0:		mysql-workbench-avoid-version_fix.diff
-Patch1:		mysql-workbench-5.1.5-fix-str-fmt.patch
+Patch0:		mysql-workbench-5.1.10-fix-str-fmt.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
@@ -66,6 +65,7 @@ BuildRequires:	readline-devel
 BuildRequires:	termcap-devel
 %if %{build_java}
 BuildRequires:  junit
+BuildRequires:	eclipse-ecj
 BuildRequires:  java-gcj-compat-devel
 BuildRequires:  jpackage-utils
 %endif
@@ -82,7 +82,6 @@ least 16MB of memory.
 
 %setup -q -n %{name}-%{version}
 %patch0 -p1
-%patch1 -p1
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
@@ -125,7 +124,7 @@ install -d %{buildroot}%{_liconsdir}
 
 install -d %{buildroot}%{_datadir}/applications
 rm -f %{buildroot}%{_datadir}/applications/MySQLWorkbench.desktop
-cat > %{buildroot}%{_datadir}/applications/mysql-workbench.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/mysql-workbench-oss.desktop << EOF
 [Desktop Entry]
 Name=MySQL Workbench
 Comment=MySQL Database Design Tool
@@ -133,7 +132,7 @@ Exec=%{_bindir}/mysql-workbench
 Terminal=false
 Type=Application
 Icon=mysql-workbench
-Categories=X-MandrivaLinux-MoreApplications-Databases;GTK;Database;Development;Application;
+Categories=X-MandrivaLinux-MoreApplications-Databases;
 EOF
 
 # make some icons
@@ -170,19 +169,26 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %dir %{_libdir}/mysql-workbench/plugins
 %attr(0755,root,root) %{_libdir}/mysql-workbench/*.so*
 %attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so
+%attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0
+%attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0.0.0
 %attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so
+%attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0
+%attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0.0.0
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/images
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/data
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/grt
+%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/libraries
 %attr(0644,root,root) %{_datadir}/mysql-workbench/*.glade
 %attr(0644,root,root) %{_datadir}/mysql-workbench/workbench.rc
 %attr(0644,root,root) %{_datadir}/mysql-workbench/data/*.xml
 %attr(0644,root,root) %{_datadir}/mysql-workbench/grt/*.xml
 %attr(0644,root,root) %{_datadir}/mysql-workbench/images/*.png
 %attr(0644,root,root) %{_datadir}/mysql-workbench/images/*.cur
+%attr(0644,root,root) %{_datadir}/mysql-workbench/libraries/*.py
+%attr(0644,root,root) %{_datadir}/mysql-workbench/libraries/*.lua
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/db_mysql_catalog_reporting
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/db_mysql_catalog_reporting/Basic_Text.tpl
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting
@@ -197,7 +203,7 @@ rm -rf %{buildroot}
 %attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/Text_Basic.tpl/*
 %attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/*.glade
 %attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/*.xml
-%attr(0644,root,root) %{_datadir}/applications/mysql-workbench.desktop
+%attr(0644,root,root) %{_datadir}/applications/mysql-workbench-oss.desktop
 %attr(0644,root,root) %{_iconsdir}/mysql-workbench.png
 %attr(0644,root,root) %{_liconsdir}/mysql-workbench.png
 %attr(0644,root,root) %{_miconsdir}/mysql-workbench.png
