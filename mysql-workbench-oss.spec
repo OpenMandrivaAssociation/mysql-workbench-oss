@@ -15,7 +15,7 @@ Summary:	Extensible modeling tool for MySQL 5.0
 Name:		mysql-workbench-oss
 Group:		Databases
 Version:	5.1.16
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
@@ -91,7 +91,7 @@ least 16MB of memory.
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 # remove internal libs
-rm -rf ext/{boost,curl,libsigc++,yassl}
+rm -rf ext/{ctemplate,boost,curl,libsigc++,yassl}
 
 %build
 
