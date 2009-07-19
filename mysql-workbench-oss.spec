@@ -14,18 +14,20 @@
 Summary:	Extensible modeling tool for MySQL 5.0
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.1.10
+Version:	5.1.16
 Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
 Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/%{name}-%{version}.tar.gz
-Patch0:		mysql-workbench-5.1.10-fix-str-fmt.patch
+Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
+Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
 BuildRequires:	cairo-devel
-BuildRequires:	ctemplate-devel
+BuildRequires:	boost-devel >= 1.35.0
+BuildRequires:	ctemplate-devel >= 0.91
 BuildRequires:	expat-devel
 BuildRequires:	file
 BuildRequires:  freetype2-devel >= 2.1.10
@@ -41,6 +43,7 @@ BuildRequires:	libext2fs-devel
 BuildRequires:	libfcgi-devel
 BuildRequires:	libfontconfig-devel
 BuildRequires:	libglade2.0-devel >= 2.5
+BuildRequires:	libgnome2-devel
 BuildRequires:	libgnomeprint-devel >= 2.2.0
 BuildRequires:	libpng-devel
 BuildRequires:	libsigc++2.0-devel
@@ -66,7 +69,7 @@ BuildRequires:	termcap-devel
 %if %{build_java}
 BuildRequires:  junit
 BuildRequires:	eclipse-ecj
-BuildRequires:  java-gcj-compat-devel
+BuildRequires:  gcj-tools
 BuildRequires:  jpackage-utils
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -82,9 +85,13 @@ least 16MB of memory.
 
 %setup -q -n %{name}-%{version}
 %patch0 -p1
+%patch1 -p1
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
+
+# remove internal libs
+rm -rf ext/{boost,curl,libsigc++,yassl}
 
 %build
 
@@ -112,8 +119,10 @@ cat > %{buildroot}%{_bindir}/mysql-workbench << EOF
 #!/bin/bash
 export LD_LIBRARY_PATH="%{_libdir}/mysql-workbench:\$LD_LIBRARY_PATH"
 export MWB_DATA_DIR="%{_datadir}/mysql-workbench"
+export MWB_LIBRARY_DIR="%{_datadir}/mysql-workbench/libraries"
 export MWB_MODULE_DIR="%{_libdir}/mysql-workbench/modules"
 export MWB_PLUGIN_DIR="%{_libdir}/mysql-workbench/plugins"
+export DBC_DRIVER_PATH="%{_libdir}/mysql-workbench"
 %{_bindir}/mysql-workbench-bin \$*
 EOF
 
@@ -171,6 +180,7 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so
 %attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0
 %attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0.0.0
+%attr(0644,root,root) %{_libdir}/mysql-workbench/modules/wb_utils_grt.py
 %attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so
 %attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0
 %attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0.0.0
