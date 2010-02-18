@@ -66,6 +66,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	readline-devel
 BuildRequires:	termcap-devel
+BuildRequires:	libuuid-devel
 %if %{build_java}
 BuildRequires:  junit
 BuildRequires:	eclipse-ecj
