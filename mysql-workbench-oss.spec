@@ -11,7 +11,7 @@
 %{?_with_autotools: %{expand: %%global build_autotools 1}}
 %{?_without_autotools: %{expand: %%global build_autotools 0}}
 
-Summary:	Extensible modeling tool for MySQL 5.0
+Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
 Version:	5.1.16
@@ -22,19 +22,23 @@ URL:		http://dev.mysql.com/downloads/workbench/
 Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/%{name}-%{version}.tar.gz
 Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
 Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
+Patch2:		mysql-workbench-oss-5.1.16-use_-avoid-version_for_plugins.diff
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
-BuildRequires:	cairo-devel
 BuildRequires:	boost-devel >= 1.35.0
+BuildRequires:	cairo-devel
+BuildRequires:	cairomm-devel
 BuildRequires:	ctemplate-devel >= 0.91
 BuildRequires:	expat-devel
+BuildRequires:	fdupes
 BuildRequires:	file
 BuildRequires:  freetype2-devel >= 2.1.10
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel
 BuildRequires:	glibmm2.4-devel
+BuildRequires:	glitz-devel
 BuildRequires:	gtk2-devel
 BuildRequires:	gtkhtml-3.14-devel
 BuildRequires:	gtkmm2.4-devel >= 2.6
@@ -49,6 +53,7 @@ BuildRequires:	libpng-devel
 BuildRequires:	libsigc++2.0-devel
 BuildRequires:	libslang-devel
 BuildRequires:	libtool
+BuildRequires:	libuuid-devel
 BuildRequires:  libx11-devel
 BuildRequires:  libxext-devel
 BuildRequires:	libxml2-devel
@@ -57,6 +62,7 @@ BuildRequires:	libzip-devel
 BuildRequires:	lua5.1-devel
 BuildRequires:	mesagl-devel
 BuildRequires:	mesaglu-devel
+BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
@@ -65,8 +71,8 @@ BuildRequires:  pixman-devel >= 0.11.2
 BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	readline-devel
+BuildRequires:	scintilla-devel
 BuildRequires:	termcap-devel
-BuildRequires:	libuuid-devel
 %if %{build_java}
 BuildRequires:  junit
 BuildRequires:	eclipse-ecj
@@ -87,14 +93,24 @@ least 16MB of memory.
 %setup -q -n %{name}-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 # remove internal libs
-rm -rf ext/{ctemplate,boost,curl,libsigc++,yassl}
+rm -rf ext
+
+# other small fixes
+touch po/POTFILES.in
+
+# ctemplete is now ctemplate and not google anymore
+for i in `grep -Rl google .`; do
+    sed -i 's/google/ctemplate/g' $i;
+done
 
 %build
+export CPPFLAGS="$CPPFLAGS `pkg-config --cflags scintilla`"
 
 %if %{build_autotools}
 NOCONFIGURE=yes ./autogen.sh
@@ -179,12 +195,8 @@ rm -rf %{buildroot}
 %attr(0755,root,root) %dir %{_libdir}/mysql-workbench/plugins
 %attr(0755,root,root) %{_libdir}/mysql-workbench/*.so*
 %attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so
-%attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0
-%attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so.0.0.0
 %attr(0644,root,root) %{_libdir}/mysql-workbench/modules/wb_utils_grt.py
 %attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so
-%attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0
-%attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so.0.0.0
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/images
 %attr(0755,root,root) %dir %{_datadir}/mysql-workbench/data
