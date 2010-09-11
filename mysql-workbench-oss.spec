@@ -1,6 +1,3 @@
-%define _disable_ld_as_needed 1
-%define _disable_ld_no_undefined 1
-
 %define build_java 1
 %define build_autotools 1
 
@@ -14,15 +11,16 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.1.16
-Release:	%mkrel 4
+Version:	5.2.27
+Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
-Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/%{name}-%{version}.tar.gz
+Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/mysql-workbench-gpl-%{version}.tar.gz
 Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
 Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
 Patch2:		mysql-workbench-oss-5.1.16-use_-avoid-version_for_plugins.diff
+Patch3:		mysql-workbench-gpl-5.2.27-linkage.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
@@ -90,19 +88,17 @@ least 16MB of memory.
 
 %prep
 
-%setup -q -n %{name}-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%setup -q -n mysql-workbench-gpl-%{version}
+#%patch0 -p1
+#%patch1 -p1
+#%patch2 -p1
+%patch3 -p0 -b .link
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
-# remove internal libs
-rm -rf ext
-
 # other small fixes
-touch po/POTFILES.in
+#touch po/POTFILES.in
 
 # ctemplete is now ctemplate and not google anymore
 for i in `grep -Rl google .`; do
@@ -110,7 +106,7 @@ for i in `grep -Rl google .`; do
 done
 
 %build
-export CPPFLAGS="$CPPFLAGS `pkg-config --cflags scintilla`"
+#export CPPFLAGS="$CPPFLAGS `pkg-config --cflags scintilla`"
 
 %if %{build_autotools}
 NOCONFIGURE=yes ./autogen.sh
@@ -119,10 +115,10 @@ NOCONFIGURE=yes ./autogen.sh
 %configure2_5x
 
 # antibork
-find -type f -name Makefile | xargs perl -pi -e "s|-Wl,--as-needed||g"
+#find -type f -name Makefile | xargs perl -pi -e "s|-Wl,--as-needed||g"
 
 # use the shared libs
-find -type f -name Makefile | xargs perl -pi -e "s|%{_libdir}/python%{pyver}/config/libpython%{pyver}.a|-lpython%{pyver}|g"
+#find -type f -name Makefile | xargs perl -pi -e "s|%{_libdir}/python%{pyver}/config/libpython%{pyver}.a|-lpython%{pyver}|g"
 
 %make
 
