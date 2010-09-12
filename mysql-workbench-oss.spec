@@ -112,7 +112,7 @@ done
 NOCONFIGURE=yes ./autogen.sh
 %endif
 %define _disable_ld_no_undefined 1
-%configure2_5x
+%configure2_5x --disable-static
 
 # antibork
 #find -type f -name Makefile | xargs perl -pi -e "s|-Wl,--as-needed||g"
@@ -154,7 +154,7 @@ Exec=%{_bindir}/mysql-workbench
 Terminal=false
 Type=Application
 Icon=mysql-workbench
-Categories=X-MandrivaLinux-MoreApplications-Databases;
+Categories=Database;Office;
 EOF
 
 # make some icons
@@ -164,6 +164,7 @@ convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -re
 
 # cleanup
 rm -f %{buildroot}%{_libdir}/mysql-workbench/*.*a
+rm -f %{buildroot}%{_libdir}/mysql-workbench/lib*.so
 rm -f %{buildroot}%{_libdir}/mysql-workbench/modules/*.*a
 rm -f %{buildroot}%{_libdir}/mysql-workbench/plugins/*.*a
 
@@ -183,46 +184,13 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root)
 %doc COPYING ChangeLog README
-%attr(0755,root,root) %{_bindir}/mysql-workbench
-%attr(0755,root,root) %{_bindir}/mysql-workbench-bin
-%attr(0755,root,root) %{_bindir}/grtshell
-%attr(0755,root,root) %dir %{_libdir}/mysql-workbench
-%attr(0755,root,root) %dir %{_libdir}/mysql-workbench/modules
-%attr(0755,root,root) %dir %{_libdir}/mysql-workbench/plugins
-%attr(0755,root,root) %{_libdir}/mysql-workbench/*.so*
-%attr(0755,root,root) %{_libdir}/mysql-workbench/modules/*.so
-%attr(0644,root,root) %{_libdir}/mysql-workbench/modules/wb_utils_grt.py
-%attr(0755,root,root) %{_libdir}/mysql-workbench/plugins/*.so
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/images
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/data
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/grt
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/libraries
-%attr(0644,root,root) %{_datadir}/mysql-workbench/*.glade
-%attr(0644,root,root) %{_datadir}/mysql-workbench/workbench.rc
-%attr(0644,root,root) %{_datadir}/mysql-workbench/data/*.xml
-%attr(0644,root,root) %{_datadir}/mysql-workbench/grt/*.xml
-%attr(0644,root,root) %{_datadir}/mysql-workbench/images/*.png
-%attr(0644,root,root) %{_datadir}/mysql-workbench/images/*.cur
-%attr(0644,root,root) %{_datadir}/mysql-workbench/libraries/*.py
-%attr(0644,root,root) %{_datadir}/mysql-workbench/libraries/*.lua
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/db_mysql_catalog_reporting
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/db_mysql_catalog_reporting/Basic_Text.tpl
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Basic_Frames.tpl
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Basic_Single_Page.tpl
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Detailed_Frames.tpl
-%attr(0755,root,root) %dir %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/Text_Basic.tpl
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/db_mysql_catalog_reporting/Basic_Text.tpl/*
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Basic_Frames.tpl/*
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Basic_Single_Page.tpl/*
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/HTML_Detailed_Frames.tpl/*
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/wb_model_reporting/Text_Basic.tpl/*
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/*.glade
-%attr(0644,root,root) %{_datadir}/mysql-workbench/modules/data/*.xml
-%attr(0644,root,root) %{_datadir}/applications/mysql-workbench-oss.desktop
-%attr(0644,root,root) %{_iconsdir}/mysql-workbench.png
-%attr(0644,root,root) %{_liconsdir}/mysql-workbench.png
-%attr(0644,root,root) %{_miconsdir}/mysql-workbench.png
+%{_bindir}/*
+%{_libdir}/mysql-workbench/lib*.so.*
+%{_libdir}/mysql-workbench/mysqlcppconn.so
+%{_libdir}/mysql-workbench/modules
+%{_libdir}/mysql-workbench/plugins
+%{_datadir}/mysql-workbench
+%{_datadir}/applications/mysql-workbench-oss.desktop
+%{_iconsdir}/mysql-workbench.png
+%{_liconsdir}/mysql-workbench.png
+%{_miconsdir}/mysql-workbench.png
