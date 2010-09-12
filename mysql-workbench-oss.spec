@@ -111,7 +111,7 @@ done
 %if %{build_autotools}
 NOCONFIGURE=yes ./autogen.sh
 %endif
-
+%define _disable_ld_no_undefined 1
 %configure2_5x
 
 # antibork
