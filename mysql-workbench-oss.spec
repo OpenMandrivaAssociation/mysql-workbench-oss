@@ -19,7 +19,7 @@ URL:		http://dev.mysql.com/downloads/workbench/
 Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/mysql-workbench-gpl-%{version}.tar.gz
 Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
 Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
-Patch2:		mysql-workbench-oss-5.1.16-use_-avoid-version_for_plugins.diff
+Patch2:		mysql-workbench-gpl-5.2.27-use_-avoid-version_for_plugins.patch
 Patch3:		mysql-workbench-gpl-5.2.27-linkage.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
@@ -91,7 +91,7 @@ least 16MB of memory.
 %setup -q -n mysql-workbench-gpl-%{version}
 #%patch0 -p1
 #%patch1 -p1
-#%patch2 -p1
+%patch2 -p0 -b .module
 %patch3 -p0 -b .link
 
 # lib64 fix
