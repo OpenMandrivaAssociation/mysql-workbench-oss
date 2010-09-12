@@ -71,6 +71,8 @@ BuildRequires:	python-devel
 BuildRequires:	readline-devel
 BuildRequires:	scintilla-devel
 BuildRequires:	termcap-devel
+BuildRequires:	sqlite3-devel
+BuildRequires:	libgnome-keyring-devel
 %if %{build_java}
 BuildRequires:  junit
 BuildRequires:	eclipse-ecj
