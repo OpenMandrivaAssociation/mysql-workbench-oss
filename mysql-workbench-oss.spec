@@ -11,12 +11,12 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.2.27
+Version:	5.2.31
 Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
-Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/mysql-workbench-gpl-%{version}.tar.gz
+Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/mysql-workbench-gpl-%{version}a-src.tar.gz
 Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
 Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
 Patch2:		mysql-workbench-gpl-5.2.27-use_-avoid-version_for_plugins.patch
@@ -90,11 +90,11 @@ least 16MB of memory.
 
 %prep
 
-%setup -q -n mysql-workbench-gpl-%{version}
+%setup -q -n mysql-workbench-gpl-%{version}-src
 #%patch0 -p1
 #%patch1 -p1
-%patch2 -p0 -b .module
-%patch3 -p0 -b .link
+%patch2 -p1 -b .module
+%patch3 -p1 -b .link
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
