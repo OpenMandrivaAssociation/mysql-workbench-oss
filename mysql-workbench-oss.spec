@@ -11,16 +11,12 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.2.31
-Release:	%mkrel 2
+Version:	5.2.33
+Release:	%mkrel 1
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
-Source0:	ftp://ftp.mysql.com/pub/mysql/download/gui-tools/mysql-workbench-gpl-%{version}a-src.tar.gz
-Patch0:		mysql-workbench-oss-5.1.16_buildfix_gcc-4_4.patch
-Patch1:		mysql-workbench-oss-5.1.16_remove-internal-ext.patch
-Patch2:		mysql-workbench-gpl-5.2.27-use_-avoid-version_for_plugins.patch
-Patch3:		mysql-workbench-gpl-5.2.27-linkage.patch
+Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}b-src.tar.gz
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
@@ -91,10 +87,8 @@ least 16MB of memory.
 %prep
 
 %setup -q -n mysql-workbench-gpl-%{version}-src
-#%patch0 -p1
-#%patch1 -p1
-%patch2 -p1 -b .module
-%patch3 -p1 -b .link
+#%patch2 -p1 -b .module
+#%patch3 -p1 -b .link
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
@@ -122,7 +116,7 @@ NOCONFIGURE=yes ./autogen.sh
 # use the shared libs
 #find -type f -name Makefile | xargs perl -pi -e "s|%{_libdir}/python%{pyver}/config/libpython%{pyver}.a|-lpython%{pyver}|g"
 
-%make
+make
 
 %install
 rm -rf %{buildroot}
@@ -189,6 +183,10 @@ rm -rf %{buildroot}
 %{_bindir}/*
 %{_libdir}/mysql-workbench/lib*.so.*
 %{_libdir}/mysql-workbench/mysqlcppconn.so
+%{_libdir}/mysql-workbench/mysqlcppconn.so.0
+%{_libdir}/mysql-workbench/mysqlcppconn.so.0.0.0
+/usr/share/doc/mysql-workbench/COPYING
+/usr/share/doc/mysql-workbench/README
 %{_libdir}/mysql-workbench/modules
 %{_libdir}/mysql-workbench/plugins
 %{_datadir}/mysql-workbench
