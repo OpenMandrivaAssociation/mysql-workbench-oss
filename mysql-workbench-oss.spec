@@ -185,8 +185,6 @@ rm -rf %{buildroot}
 %{_bindir}/*
 %{_libdir}/mysql-workbench/lib*.so.*
 %{_libdir}/mysql-workbench/mysqlcppconn.so
-%{_libdir}/mysql-workbench/mysqlcppconn.so.0
-%{_libdir}/mysql-workbench/mysqlcppconn.so.0.0.0
 /usr/share/doc/mysql-workbench/COPYING
 /usr/share/doc/mysql-workbench/README
 %{_libdir}/mysql-workbench/modules
