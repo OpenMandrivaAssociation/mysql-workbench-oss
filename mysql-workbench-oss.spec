@@ -22,6 +22,7 @@ Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{
 Patch0:	        mysql-workbench-gpl-5.2.33-use_-avoid-version_for_plugins.patch
 Patch1:	        mysql-workbench-gpl-5.2.33-linkage.patch
 Patch2:		mysql-workbench-5.2.33-gcc46.patch
+Patch3:		mysql-workbench-gpl-5.2.33-get_admin_script_for_os-prototype-and-string-as-reference.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench
 BuildRequires:	autoconf2.5
@@ -92,9 +93,10 @@ least 16MB of memory.
 %prep
 
 %setup -q -n mysql-workbench-gpl-%{version}-src
-%patch0 -p1 -b .module
-%patch1 -p1 -b .link
-%patch2 -p1 -b .gcc46
+%patch0 -p1 -b .module~
+%patch1 -p1 -b .link~
+%patch2 -p1 -b .gcc46~
+%patch3 -p1 -b .str_reference~
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
