@@ -14,7 +14,7 @@ Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
 Version:	5.2.33
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	GPL
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
@@ -82,6 +82,7 @@ BuildRequires:  gcj-tools
 BuildRequires:  jpackage-utils
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Requires:	python-paramiko
 
 %description
 MySQL Workbench is modeling tool that allows you to design and generate MySQL
