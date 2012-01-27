@@ -13,18 +13,16 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.2.33
-Release:	%mkrel 4
-License:	GPL
+Version:	5.2.37
+Release:	%mkrel 0
+License:	GPLv2 and LGPLv2
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
-Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}b-src.tar.gz
-Patch0:	        mysql-workbench-gpl-5.2.33-use_-avoid-version_for_plugins.patch
-Patch1:	        mysql-workbench-gpl-5.2.33-linkage.patch
-Patch2:		mysql-workbench-5.2.33-gcc46.patch
+Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
 Patch3:		mysql-workbench-gpl-5.2.33-get_admin_script_for_os-prototype-and-string-as-reference.patch
+Patch4:		mysql-workbench-5.2.37-mdv-glib.patch
 Obsoletes:	mysql-workbench < 5.1.6
-Provides:	mysql-workbench
+Provides:	mysql-workbench = %{EVRD}
 BuildRequires:	autoconf2.5
 BuildRequires:	boost-devel >= 1.35.0
 BuildRequires:	cairo-devel
@@ -33,7 +31,7 @@ BuildRequires:	ctemplate-devel >= 0.91
 BuildRequires:	expat-devel
 BuildRequires:	fdupes
 BuildRequires:	file
-BuildRequires:  freetype2-devel >= 2.1.10
+BuildRequires:	freetype2-devel >= 2.1.10
 BuildRequires:	gettext
 BuildRequires:	gettext-devel
 BuildRequires:	glib2-devel
@@ -54,8 +52,8 @@ BuildRequires:	libsigc++2.0-devel
 BuildRequires:	libslang-devel
 BuildRequires:	libtool
 BuildRequires:	libuuid-devel
-BuildRequires:  libx11-devel
-BuildRequires:  libxext-devel
+BuildRequires:	libx11-devel
+BuildRequires:	libxext-devel
 BuildRequires:	libxml2-devel
 BuildRequires:	libxrender-devel
 BuildRequires:	libzip-devel
@@ -67,7 +65,7 @@ BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	ncurses-devel
 BuildRequires:	openssl-devel
 BuildRequires:	pcre-devel >= 5.0
-BuildRequires:  pixman-devel >= 0.11.2
+BuildRequires:	pixman-devel >= 0.11.2
 BuildRequires:	pkgconfig
 BuildRequires:	python-devel
 BuildRequires:	readline-devel
@@ -76,10 +74,11 @@ BuildRequires:	termcap-devel
 BuildRequires:	sqlite3-devel
 BuildRequires:	libgnome-keyring-devel
 %if %{build_java}
-BuildRequires:  junit
+BuildRequires:	junit
 BuildRequires:	eclipse-ecj
-BuildRequires:  gcj-tools
-BuildRequires:  jpackage-utils
+BuildRequires:	gcj-tools
+BuildRequires:	jpackage-utils
+BuildRequires:	dos2unix
 %endif
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	python-paramiko
@@ -94,10 +93,12 @@ least 16MB of memory.
 %prep
 
 %setup -q -n mysql-workbench-gpl-%{version}-src
-%patch0 -p1 -b .module~
-%patch1 -p1 -b .link~
-%patch2 -p1 -b .gcc46~
-%patch3 -p1 -b .str_reference~
+
+#use -avoid-version ld flag for plugins
+sed -i.avoidversion~ 's/_wbp_la_LDFLAGS=-module/_wbp_la_LDFLAGS=-module -avoid-version/' plugins/*/linux/Makefile.am
+
+#patch3 -p1 -b .str_reference~
+%patch4 -p1 -b .glib~
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
@@ -109,6 +110,14 @@ perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 for i in `grep -Rl google .`; do
     sed -i 's/google/ctemplate/g' $i;
 done
+
+for file in README
+do
+iconv -f ISO-8859-1 -t UTF-8 "$file" > "${file}.new"
+mv "${file}.new" "$file"
+done
+
+dos2unix COPYING README
 
 %build
 #export CPPFLAGS="$CPPFLAGS `pkg-config --cflags scintilla`"
@@ -167,33 +176,22 @@ convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -re
 convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -resize 32x32 %{buildroot}%{_iconsdir}/mysql-workbench.png
 convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -resize 48x48 %{buildroot}%{_liconsdir}/mysql-workbench.png
 
+chmod a+x %{buildroot}%{_datadir}/mysql-workbench/sshtunnel.py
+
 # cleanup
 rm -f %{buildroot}%{_libdir}/mysql-workbench/*.*a
 rm -f %{buildroot}%{_libdir}/mysql-workbench/lib*.so
 rm -f %{buildroot}%{_libdir}/mysql-workbench/modules/*.*a
 rm -f %{buildroot}%{_libdir}/mysql-workbench/plugins/*.*a
 
-%if %mdkversion < 200900
-%post
-%update_menus
-%endif
-
-%if %mdkversion < 200900
-%postun
-%clean_menus
-%endif
-
-%clean
-rm -rf %{buildroot}
-
 %files
 %defattr(-,root,root)
 %doc COPYING ChangeLog README
 %{_bindir}/*
 %{_libdir}/mysql-workbench/lib*.so.*
-%{_libdir}/mysql-workbench/mysqlcppconn.so
-/usr/share/doc/mysql-workbench/COPYING
-/usr/share/doc/mysql-workbench/README
+%{_libdir}/mysql-workbench/mysqlcppconn.so*
+%{_docdir}/mysql-workbench/COPYING
+%{_docdir}/mysql-workbench/README
 %{_libdir}/mysql-workbench/modules
 %{_libdir}/mysql-workbench/plugins
 %{_datadir}/mysql-workbench
