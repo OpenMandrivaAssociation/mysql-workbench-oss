@@ -21,6 +21,7 @@ URL:		http://dev.mysql.com/downloads/workbench/
 Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
 Patch3:		mysql-workbench-gpl-5.2.33-get_admin_script_for_os-prototype-and-string-as-reference.patch
 Patch4:		mysql-workbench-5.2.37-mdv-glib.patch
+Patch5:		mysql-workbench-gpl-5.2.37-mdv-automake1112.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
 BuildRequires:	autoconf2.5
@@ -99,6 +100,7 @@ sed -i.avoidversion~ 's/_wbp_la_LDFLAGS=-module/_wbp_la_LDFLAGS=-module -avoid-v
 
 #patch3 -p1 -b .str_reference~
 %patch4 -p1 -b .glib~
+%patch5 -p1 -b .automake~
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
