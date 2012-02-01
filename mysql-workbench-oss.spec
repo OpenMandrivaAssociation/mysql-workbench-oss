@@ -44,7 +44,7 @@ BuildRequires:	gtkmm2.4-devel >= 2.6
 BuildRequires:	imagemagick
 BuildRequires:	ext2fs-devel
 BuildRequires:	libfcgi-devel
-BuildRequires:	libfontconfig-devel
+BuildRequires:	fontconfig-devel
 BuildRequires:	libglade2.0-devel >= 2.5
 BuildRequires:	libgnome2-devel
 BuildRequires:	libgnomeprint-devel >= 2.2.0
