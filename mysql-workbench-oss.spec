@@ -42,7 +42,7 @@ BuildRequires:	gtk2-devel
 BuildRequires:	gtkhtml-3.14-devel
 BuildRequires:	gtkmm2.4-devel >= 2.6
 BuildRequires:	imagemagick
-BuildRequires:	libext2fs-devel
+BuildRequires:	ext2fs-devel
 BuildRequires:	libfcgi-devel
 BuildRequires:	libfontconfig-devel
 BuildRequires:	libglade2.0-devel >= 2.5
