@@ -13,14 +13,14 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Group:		Databases
-Version:	5.2.37
-Release:	%mkrel 0
+Version:	5.2.39
+Release:	%mkrel 1
 License:	GPLv2 and LGPLv2
 URL:		http://dev.mysql.com/downloads/workbench/
 # ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
 Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
 Patch3:		mysql-workbench-gpl-5.2.33-get_admin_script_for_os-prototype-and-string-as-reference.patch
-Patch4:		mysql-workbench-5.2.37-mdv-glib.patch
+Patch4:		mysql-workbench-5.2.39-mdv-glib.patch
 Patch5:		mysql-workbench-gpl-5.2.37-mdv-automake1112.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
@@ -50,7 +50,7 @@ BuildRequires:	libgnome2-devel
 BuildRequires:	libgnomeprint-devel >= 2.2.0
 BuildRequires:	libpng-devel
 BuildRequires:	libsigc++2.0-devel
-BuildRequires:	libslang-devel
+BuildRequires:	pkgconfig(slang)
 BuildRequires:	libtool
 BuildRequires:	libuuid-devel
 BuildRequires:	libx11-devel
@@ -98,6 +98,10 @@ least 16MB of memory.
 #use -avoid-version ld flag for plugins
 sed -i.avoidversion~ 's/_wbp_la_LDFLAGS=-module/_wbp_la_LDFLAGS=-module -avoid-version/' plugins/*/linux/Makefile.am
 
+sed -i -e 's/debug_flags="-ggdb3 /debug_flags="/' configure || die
+sed -i -e 's/-O0 -g3//' ext/scintilla/gtk/Makefile.in ext/scintilla/gtk/Makefile.am || die
+
+
 #patch3 -p1 -b .str_reference~
 %patch4 -p1 -b .glib~
 %patch5 -p1 -b .automake~
@@ -107,6 +111,8 @@ perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 # other small fixes
 #touch po/POTFILES.in
+
+fgrep -rlZ pkglib_DATA --include Makefile.am . | xargs -0 sed -i 's/pkglib_DATA/pkgdata_DATA/g'
 
 # ctemplete is now ctemplate and not google anymore
 for i in `grep -Rl google .`; do
