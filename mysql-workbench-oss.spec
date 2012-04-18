@@ -203,6 +203,11 @@ rm -f %{buildroot}%{_libdir}/mysql-workbench/plugins/*.*a
 %{_libdir}/mysql-workbench/modules
 %{_libdir}/mysql-workbench/plugins
 %{_datadir}/mysql-workbench
+
+%{_datadir}/icons/hicolor/*/*/*
+%{_datadir}/mime/packages/mysql-workbench.xml
+%{_datadir}/mime-info/mysql-workbench.mime
+
 %{_datadir}/applications/mysql-workbench-oss.desktop
 %{_iconsdir}/mysql-workbench.png
 %{_liconsdir}/mysql-workbench.png
