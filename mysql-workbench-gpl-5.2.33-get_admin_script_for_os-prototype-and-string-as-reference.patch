@@ -1,0 +1,67 @@
+--- mysql-workbench-gpl-5.2.33-src/backend/wbprivate/workbench/wb_module.cpp.str_reference~	2011-03-17 13:48:44.000000000 +0100
++++ mysql-workbench-gpl-5.2.33-src/backend/wbprivate/workbench/wb_module.cpp	2011-05-25 14:05:28.000000000 +0200
+@@ -1708,8 +1708,6 @@ int WorkbenchImpl::createConnectionsFrom
+  */
+ int WorkbenchImpl::createInstancesFromLocalServers()
+ {
+-  extern std::string get_admin_script_for_os(const std::string &os);
+-
+   try
+   {
+     grt::DictListRef servers = getLocalServerList();
+@@ -1718,6 +1716,8 @@ int WorkbenchImpl::createInstancesFromLo
+ 
+     db_mgmt_RdbmsRef rdbms = find_object_in_list(_wb->get_root()->rdbmsMgmt()->rdbms(), DEFAULT_RDBMS_ID);
+     grt::ListRef<db_mgmt_ServerInstance> instances(_wb->get_root()->rdbmsMgmt()->storedInstances());
++    const std::string os("Windows");
++
+     size_t count = servers->count();
+     for (size_t i = 0; i < count; i++)
+     {
+@@ -1759,7 +1759,7 @@ int WorkbenchImpl::createInstancesFromLo
+ 
+         instance->owner(_wb->get_root()->rdbmsMgmt());
+ 
+-        instance->serverInfo().gset("sys.system", "Windows");
++        instance->serverInfo().gset("sys.system", os);
+         instance->serverInfo().gset("windowsAdmin", 1);
+         instance->loginInfo().gset("wmi.userName", ""); // Only used for remote connections.
+         instance->loginInfo().gset("wmi.hostName", ""); // Only used for remote connections.
+@@ -1767,7 +1767,7 @@ int WorkbenchImpl::createInstancesFromLo
+         instance->name("Local " + service_display_name);
+ 
+         instance->serverInfo().gset("sys.preset", "Custom");
+-        instance->serverInfo().gset("sys.script", get_admin_script_for_os("Windows"));
++        instance->serverInfo().gset("sys.script", get_admin_script_for_os(os));
+ 
+         instance->serverInfo().gset("sys.config.path", config_file);
+         instance->serverInfo().gset("sys.config.section", "mysqld");
+--- mysql-workbench-gpl-5.2.33-src/frontend/common/new_server_instance_wizard.cpp.str_reference~	2011-03-17 13:48:42.000000000 +0100
++++ mysql-workbench-gpl-5.2.33-src/frontend/common/new_server_instance_wizard.cpp	2011-05-25 14:05:28.000000000 +0200
+@@ -21,6 +21,7 @@
+ 
+ #include "base/string_utilities.h"
+ #include "new_server_instance_wizard.h"
++#include "server_instance_editor.h"
+ #include "grt/grt_manager.h"
+ #include "grtui/grtdb_connection_editor.h"
+ 
+@@ -1859,8 +1860,6 @@ NewServerInstanceWizard::~NewServerInsta
+  */
+ db_mgmt_ServerInstanceRef NewServerInstanceWizard::assemble_server_instance()
+ {
+-  extern std::string get_admin_script_for_os(const std::string &os);
+-
+   _instance->owner(_context->get_root()->rdbmsMgmt());
+   
+   std::string os = values().get_string("os");
+--- mysql-workbench-gpl-5.2.33-src/frontend/common/server_instance_editor.h.str_reference~	2011-03-17 13:48:45.000000000 +0100
++++ mysql-workbench-gpl-5.2.33-src/frontend/common/server_instance_editor.h	2011-05-25 14:06:17.000000000 +0200
+@@ -28,6 +28,7 @@
+ 
+ #include "grt/grt_manager.h"
+ 
++std::string get_admin_script_for_os(const std::string &os);
+ 
+ class MYSQLWBBACKEND_PUBLIC_FUNC ServerInstanceEditor : public mforms::Form 
+ { 

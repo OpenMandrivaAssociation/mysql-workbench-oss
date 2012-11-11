@@ -1,0 +1,51 @@
+Index: mysql-workbench-gpl-5.2.37-src/library/forms/swig/Makefile.am
+===================================================================
+--- mysql-workbench-gpl-5.2.37-src.orig/library/forms/swig/Makefile.am
++++ mysql-workbench-gpl-5.2.37-src/library/forms/swig/Makefile.am
+@@ -2,7 +2,7 @@
+ pkglib_LTLIBRARIES=_mforms.la
+ 
+ pkglibdir=$(libdir)/@PACKAGE@/modules
+-pkglib_DATA=mforms.py
++pkgdata_DATA=mforms.py
+ 
+ _mforms_la_SOURCES=\
+ mforms_wrap.cxx
+Index: mysql-workbench-gpl-5.2.37-src/modules/wb.utils/Makefile.am
+===================================================================
+--- mysql-workbench-gpl-5.2.37-src.orig/modules/wb.utils/Makefile.am
++++ mysql-workbench-gpl-5.2.37-src/modules/wb.utils/Makefile.am
+@@ -1,6 +1,6 @@
+ 
+ pkglibdir=$(libdir)/@PACKAGE@/modules
+ 
+-pkglib_DATA=catalog_utils.grt.lua  tools.grt.lua  wb_utils_grt.py sqlide_grt.py text_grt.py sql_reformatter.py\
++pkgdata_DATA=catalog_utils.grt.lua  tools.grt.lua  wb_utils_grt.py sqlide_grt.py text_grt.py sql_reformatter.py\
+             wb_dev_utils_grt.py table_utils_grt.py code_utils_grt.py
+ 
+Index: mysql-workbench-gpl-5.2.37-src/plugins/wb.admin/frontend/Makefile.am
+===================================================================
+--- mysql-workbench-gpl-5.2.37-src.orig/plugins/wb.admin/frontend/Makefile.am
++++ mysql-workbench-gpl-5.2.37-src/plugins/wb.admin/frontend/Makefile.am
+@@ -1,7 +1,7 @@
+ 
+ pkglibdir=$(libdir)/@PACKAGE@/modules
+ 
+-pkglib_DATA=\
++pkgdata_DATA=\
+     wb_admin_grt.py\
+     wb_admin_monitor.py\
+     wb_admin_utils.py\
+Index: mysql-workbench-gpl-5.2.37-src/plugins/wb.doclib/Makefile.am
+===================================================================
+--- mysql-workbench-gpl-5.2.37-src.orig/plugins/wb.doclib/Makefile.am
++++ mysql-workbench-gpl-5.2.37-src/plugins/wb.doclib/Makefile.am
+@@ -1,7 +1,7 @@
+ 
+ pkglibdir=$(libdir)/@PACKAGE@/modules
+ 
+-pkglib_DATA=\
++pkgdata_DATA=\
+   mysqldoclib.py\
+   wb_doclib_grt.py
+ 
