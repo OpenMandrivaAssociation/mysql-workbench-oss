@@ -1,88 +1,75 @@
 %define Werror_cflags -Wformat -fpermissive -Wextra -Wall -Wno-unused -Wno-deprecated
+%define _disable_ld_no_undefined 1
 
-%define build_java 1
-%define build_autotools 1
+%define build_java 0
 
-# commandline overrides:
-# rpm -ba|--rebuild --with 'xxx'
-%{?_with_java: %{expand: %%global build_java 1}}
-%{?_without_java: %{expand: %%global build_java 0}}
-%{?_with_autotools: %{expand: %%global build_autotools 1}}
-%{?_without_autotools: %{expand: %%global build_autotools 0}}
+# Keep internal libraries private
+%define __noautoprov 'devel(.*)|_cairo\\.so(.*)|_mforms\\.so(.*)|db(.*)\\.so(.*)|forms\\.grt\\.so(.*)|libantlr3c_wb(.*)|libcdbc\\.so(.*)|libgrt\\.so(.*)|liblinux_utilities\\.so(.*)|libmdcanvas\\.so(.*)|libmdcanvasgtk\\.so(.*)|libmforms\\.so(.*)|libmysqlparser\\.so(.*)|libsqlide\\.so(.*)|libsqlparser\\.so(.*)|libvsqlitepp\\.so(.*)|libwb(.*)\\.so(.*)|wb(.*)\\.so(.*)'
+%define __noautoreq '_cairo\\.so(.*)|_mforms\\.so(.*)|db(.*)\\.so(.*)|forms\\.grt\\.so(.*)|libantlr3c_wb(.*)|libcdbc\\.so(.*)|libgrt\\.so(.*)|liblinux_utilities\\.so(.*)|libmdcanvas\\.so(.*)|libmdcanvasgtk\\.so(.*)|libmforms\\.so(.*)|libmysqlparser\\.so(.*)|libsqlide\\.so(.*)|libsqlparser\\.so(.*)|libvsqlitepp\\.so(.*)|libwb(.*)\\.so(.*)|wb(.*)\\.so(.*)'
 
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
-Group:		Databases
-Version:	5.2.39
-Release:	%mkrel 1
+Version:	5.2.47
+Release:	3
 License:	GPLv2 and LGPLv2
-URL:		http://dev.mysql.com/downloads/workbench/
-# ftp://ftp.pbone.net/mirror/dev.mysql.com/pub/Downloads/MySQLGUITools/mysql-workbench-5.1.4-1fc9.src.rpm
-Source0:	http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
-Patch3:		mysql-workbench-gpl-5.2.33-get_admin_script_for_os-prototype-and-string-as-reference.patch
-Patch4:		mysql-workbench-5.2.39-mdv-glib.patch
-Patch5:		mysql-workbench-gpl-5.2.37-mdv-automake1112.patch
+Group:		Databases
+Url:		http://dev.mysql.com/downloads/workbench/
+Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
+Patch0:		mysql-workbench-5.2.45-cppconn.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
-BuildRequires:	autoconf2.5
-BuildRequires:	boost-devel >= 1.35.0
-BuildRequires:	cairo-devel
-BuildRequires:	cairomm-devel
-BuildRequires:	ctemplate-devel >= 0.91
-BuildRequires:	expat-devel
-BuildRequires:	fdupes
-BuildRequires:	file
-BuildRequires:	freetype2-devel >= 2.1.10
 BuildRequires:	gettext
-BuildRequires:	gettext-devel
-BuildRequires:	glib2-devel
-BuildRequires:	glibmm2.4-devel
-BuildRequires:	glitz-devel
-BuildRequires:	gtk2-devel
-BuildRequires:	gtkhtml-3.14-devel
-BuildRequires:	gtkmm2.4-devel >= 2.6
 BuildRequires:	imagemagick
-BuildRequires:	ext2fs-devel
+BuildRequires:	boost-devel
+BuildRequires:	gettext-devel
 BuildRequires:	libfcgi-devel
-BuildRequires:	fontconfig-devel
-BuildRequires:	libglade2.0-devel >= 2.5
-BuildRequires:	libgnome2-devel
-BuildRequires:	libgnomeprint-devel >= 2.2.0
-BuildRequires:	libpng-devel
-BuildRequires:	libsigc++2.0-devel
-BuildRequires:	pkgconfig(slang)
-BuildRequires:	libtool
-BuildRequires:	libuuid-devel
-BuildRequires:	libx11-devel
-BuildRequires:	libxext-devel
-BuildRequires:	libxml2-devel
-BuildRequires:	libxrender-devel
-BuildRequires:	libzip-devel
-BuildRequires:	lua5.1-devel
-BuildRequires:	mesagl-devel
-BuildRequires:	mesaglu-devel
-BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	mysql-devel >= 5.0
-BuildRequires:	ncurses-devel
-BuildRequires:	openssl-devel
-BuildRequires:	pcre-devel >= 5.0
-BuildRequires:	pixman-devel >= 0.11.2
-BuildRequires:	pkgconfig
-BuildRequires:	python-devel
+BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	readline-devel
-BuildRequires:	scintilla-devel
-BuildRequires:	termcap-devel
-BuildRequires:	sqlite3-devel
-BuildRequires:	libgnome-keyring-devel
+BuildRequires:	pkgconfig(cairo)
+BuildRequires:	pkgconfig(cairomm-1.0)
+BuildRequires:	pkgconfig(expat)
+BuildRequires:	pkgconfig(ext2fs)
+BuildRequires:	pkgconfig(fontconfig)
+BuildRequires:	pkgconfig(freetype2)
+BuildRequires:	pkgconfig(gl)
+BuildRequires:	pkgconfig(glu)
+BuildRequires:	pkgconfig(glib-2.0)
+BuildRequires:	pkgconfig(glibmm-2.4)
+BuildRequires:	pkgconfig(glitz)
+BuildRequires:	pkgconfig(gnome-keyring-1)
+BuildRequires:	pkgconfig(gtk+-2.0)
+BuildRequires:	pkgconfig(gtkmm-2.4)
+BuildRequires:	pkgconfig(libctemplate)
+BuildRequires:	pkgconfig(libglade-2.0)
+BuildRequires:	pkgconfig(libgnome-2.0)
+BuildRequires:	pkgconfig(libgnomeprint-2.2)
+BuildRequires:	pkgconfig(libgtkhtml-3.14)
+BuildRequires:	pkgconfig(libiodbc)
+BuildRequires:	pkgconfig(libpcre)
+BuildRequires:	pkgconfig(libpng)
+BuildRequires:	pkgconfig(libxml-2.0)
+BuildRequires:	pkgconfig(libzip)
+BuildRequires:	pkgconfig(lua)
+BuildRequires:	pkgconfig(ncurses)
+BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(pixman-1)
+BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(sigc++-2.0)
+BuildRequires:	pkgconfig(slang)
+BuildRequires:	pkgconfig(sqlite3)
+BuildRequires:	pkgconfig(uuid)
+BuildRequires:	pkgconfig(x11)
+BuildRequires:	pkgconfig(xext)
+BuildRequires:	pkgconfig(xrender)
 %if %{build_java}
 BuildRequires:	junit
 BuildRequires:	eclipse-ecj
 BuildRequires:	gcj-tools
 BuildRequires:	jpackage-utils
-BuildRequires:	dos2unix
 %endif
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Requires:	python-paramiko
+Requires:	python-pexpect
 
 %description
 MySQL Workbench is modeling tool that allows you to design and generate MySQL
@@ -92,61 +79,23 @@ MySQL Workbench requires OpenGL and a 3D accelerated graphics card with at
 least 16MB of memory.
 
 %prep
-
 %setup -q -n mysql-workbench-gpl-%{version}-src
+%patch0 -p1
 
-#use -avoid-version ld flag for plugins
-sed -i.avoidversion~ 's/_wbp_la_LDFLAGS=-module/_wbp_la_LDFLAGS=-module -avoid-version/' plugins/*/linux/Makefile.am
-
-sed -i -e 's/debug_flags="-ggdb3 /debug_flags="/' configure || die
-sed -i -e 's/-O0 -g3//' ext/scintilla/gtk/Makefile.in ext/scintilla/gtk/Makefile.am || die
-
-
-#patch3 -p1 -b .str_reference~
-%patch4 -p1 -b .glib~
-%patch5 -p1 -b .automake~
+sed -i -e 's:ifconfig:/sbin/ifconfig:' plugins/wb.admin/backend/wb_server_control.py || die
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
-# other small fixes
-#touch po/POTFILES.in
-
-fgrep -rlZ pkglib_DATA --include Makefile.am . | xargs -0 sed -i 's/pkglib_DATA/pkgdata_DATA/g'
-
-# ctemplete is now ctemplate and not google anymore
-for i in `grep -Rl google .`; do
-    sed -i 's/google/ctemplate/g' $i;
-done
-
-for file in README
-do
-iconv -f ISO-8859-1 -t UTF-8 "$file" > "${file}.new"
-mv "${file}.new" "$file"
-done
-
-dos2unix COPYING README
-
 %build
-#export CPPFLAGS="$CPPFLAGS `pkg-config --cflags scintilla`"
-
-%if %{build_autotools}
 NOCONFIGURE=yes ./autogen.sh
-%endif
-%define _disable_ld_no_undefined 1
-%configure2_5x --disable-static
+%configure2_5x \
+	--disable-static \
+	--disable-debug
 
-# antibork
-#find -type f -name Makefile | xargs perl -pi -e "s|-Wl,--as-needed||g"
-
-# use the shared libs
-#find -type f -name Makefile | xargs perl -pi -e "s|%{_libdir}/python%{pyver}/config/libpython%{pyver}.a|-lpython%{pyver}|g"
-
-make
+%make
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std
 
 # construct a clean and correct wrapper
@@ -158,13 +107,8 @@ export MWB_LIBRARY_DIR="%{_datadir}/mysql-workbench/libraries"
 export MWB_MODULE_DIR="%{_libdir}/mysql-workbench/modules"
 export MWB_PLUGIN_DIR="%{_libdir}/mysql-workbench/plugins"
 export DBC_DRIVER_PATH="%{_libdir}/mysql-workbench"
-%{_bindir}/mysql-workbench-bin \$*
+%{_libexecdir}/mysql-workbench-bin \$*
 EOF
-
-# fix some menu entries and stuff...
-install -d %{buildroot}%{_miconsdir}
-install -d %{buildroot}%{_iconsdir}
-install -d %{buildroot}%{_liconsdir}
 
 install -d %{buildroot}%{_datadir}/applications
 rm -f %{buildroot}%{_datadir}/applications/MySQLWorkbench.desktop
@@ -179,36 +123,29 @@ Icon=mysql-workbench
 Categories=Database;Office;
 EOF
 
-# make some icons
-convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -resize 16x16 %{buildroot}%{_miconsdir}/mysql-workbench.png
-convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -resize 32x32 %{buildroot}%{_iconsdir}/mysql-workbench.png
-convert %{buildroot}%{_datadir}/mysql-workbench/images/MySQLWorkbench-48.png -resize 48x48 %{buildroot}%{_liconsdir}/mysql-workbench.png
+# More reliable icons
+rm -rf %{buildroot}%{_datadir}/icons/hicolor/*/*/mysql-workbench.png
+for N in 16 32 48 64 128;
+do
+convert images/icons/linux/128x128/apps/mysql-workbench.png -resize ${N}x${N} $N.png;
+install -D -m 0644 $N.png %{buildroot}%{_iconsdir}/hicolor/${N}x${N}/apps/mysql-workbench.png
+done
 
 chmod a+x %{buildroot}%{_datadir}/mysql-workbench/sshtunnel.py
 
 # cleanup
 rm -f %{buildroot}%{_libdir}/mysql-workbench/*.*a
-rm -f %{buildroot}%{_libdir}/mysql-workbench/lib*.so
 rm -f %{buildroot}%{_libdir}/mysql-workbench/modules/*.*a
 rm -f %{buildroot}%{_libdir}/mysql-workbench/plugins/*.*a
+rm -rf %{buildroot}%{_docdir}/mysql-workbench
 
 %files
-%defattr(-,root,root)
 %doc COPYING ChangeLog README
 %{_bindir}/*
-%{_libdir}/mysql-workbench/lib*.so.*
-%{_libdir}/mysql-workbench/mysqlcppconn.so*
-%{_docdir}/mysql-workbench/COPYING
-%{_docdir}/mysql-workbench/README
-%{_libdir}/mysql-workbench/modules
-%{_libdir}/mysql-workbench/plugins
+%{_libdir}/mysql-workbench
+%{_libexecdir}/mysql-workbench-bin
 %{_datadir}/mysql-workbench
-
+%{_datadir}/applications/mysql-workbench-oss.desktop
 %{_datadir}/icons/hicolor/*/*/*
 %{_datadir}/mime/packages/mysql-workbench.xml
 %{_datadir}/mime-info/mysql-workbench.mime
-
-%{_datadir}/applications/mysql-workbench-oss.desktop
-%{_iconsdir}/mysql-workbench.png
-%{_liconsdir}/mysql-workbench.png
-%{_miconsdir}/mysql-workbench.png
