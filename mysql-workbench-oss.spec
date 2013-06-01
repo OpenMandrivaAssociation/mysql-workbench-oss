@@ -22,7 +22,7 @@ BuildRequires:	gettext
 BuildRequires:	imagemagick
 BuildRequires:	boost-devel
 BuildRequires:	gettext-devel
-BuildRequires:	libfcgi-devel
+BuildRequires:	fcgi-devel
 BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	readline-devel
