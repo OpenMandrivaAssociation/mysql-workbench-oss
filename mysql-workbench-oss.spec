@@ -10,7 +10,7 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Version:	5.2.47
-Release:	3
+Release:	4
 License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
