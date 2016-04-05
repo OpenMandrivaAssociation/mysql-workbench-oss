@@ -15,6 +15,7 @@ License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
 Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-%{version}-src.tar.gz
+Patch1:		0013-mysql-workbench-no-json.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
 BuildRequires:	gettext
@@ -91,12 +92,12 @@ sed -i -e 's:ifconfig:/sbin/ifconfig:' plugins/wb.admin/backend/wb_server_contro
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 %build
-export CXXFLAGS="%{optflags} -fpermissive -std=c++11"
+export CXXFLAGS="%{optflags} -fpermissive "
 %cmake
 %make
 
 %install
-%makeinstall_std
+%makeinstall_std -C build
 
 # construct a clean and correct wrapper
 cat > %{buildroot}%{_bindir}/mysql-workbench << EOF
@@ -107,12 +108,12 @@ export MWB_LIBRARY_DIR="%{_datadir}/mysql-workbench/libraries"
 export MWB_MODULE_DIR="%{_libdir}/mysql-workbench/modules"
 export MWB_PLUGIN_DIR="%{_libdir}/mysql-workbench/plugins"
 export DBC_DRIVER_PATH="%{_libdir}/mysql-workbench"
-%{_libexecdir}/mysql-workbench-bin \$*
+%{_bindir}/mysql-workbench-bin \$*
 EOF
 
 install -d %{buildroot}%{_datadir}/applications
 rm -f %{buildroot}%{_datadir}/applications/MySQLWorkbench.desktop
-cat > %{buildroot}%{_datadir}/applications/mysql-workbench-oss.desktop << EOF
+cat > %{buildroot}%{_datadir}/applications/mysql-workbench.desktop << EOF
 [Desktop Entry]
 Name=MySQL Workbench
 Comment=MySQL Database Design Tool
@@ -143,9 +144,8 @@ rm -rf %{buildroot}%{_docdir}/mysql-workbench
 %doc COPYING ChangeLog README
 %{_bindir}/*
 %{_libdir}/mysql-workbench
-%{_libexecdir}/mysql-workbench-bin
 %{_datadir}/mysql-workbench
-%{_datadir}/applications/mysql-workbench-oss.desktop
+%{_datadir}/applications/mysql-workbench.desktop
 %{_datadir}/icons/hicolor/*/*/*
 %{_datadir}/mime/packages/mysql-workbench.xml
 %{_datadir}/mime-info/mysql-workbench.mime
