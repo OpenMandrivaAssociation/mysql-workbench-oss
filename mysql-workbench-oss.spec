@@ -9,20 +9,18 @@
 
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
-Version:	5.2.47
-Release:	4
+Version:	6.3.6
+Release:	1
 License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
-Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-gpl-%{version}-src.tar.gz
-Patch0:		mysql-workbench-5.2.45-cppconn.patch
+Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-%{version}-src.tar.gz
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
 BuildRequires:	gettext
 BuildRequires:	imagemagick
 BuildRequires:	boost-devel
 BuildRequires:	gettext-devel
-BuildRequires:	fcgi-devel
 BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	readline-devel
@@ -42,9 +40,6 @@ BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(gtkmm-2.4)
 BuildRequires:	pkgconfig(libctemplate)
 BuildRequires:	pkgconfig(libglade-2.0)
-BuildRequires:	pkgconfig(libgnome-2.0)
-BuildRequires:	pkgconfig(libgnomeprint-2.2)
-BuildRequires:	pkgconfig(libgtkhtml-3.14)
 BuildRequires:	pkgconfig(libiodbc)
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(libpng)
@@ -53,8 +48,9 @@ BuildRequires:	pkgconfig(libzip)
 BuildRequires:	pkgconfig(lua)
 BuildRequires:	pkgconfig(ncurses)
 BuildRequires:	pkgconfig(openssl)
+BuildRequires:	pkgconfig(pangoxft)
 BuildRequires:	pkgconfig(pixman-1)
-BuildRequires:	pkgconfig(python)
+BuildRequires:	pkgconfig(python2)
 BuildRequires:	pkgconfig(sigc++-2.0)
 BuildRequires:	pkgconfig(slang)
 BuildRequires:	pkgconfig(sqlite3)
@@ -68,6 +64,8 @@ BuildRequires:	eclipse-ecj
 BuildRequires:	gcj-tools
 BuildRequires:	jpackage-utils
 %endif
+BuildRequires:	vsqlite++-devel
+
 Requires:	python-paramiko
 Requires:	python-pexpect
 
@@ -79,8 +77,13 @@ MySQL Workbench requires OpenGL and a 3D accelerated graphics card with at
 least 16MB of memory.
 
 %prep
-%setup -q -n mysql-workbench-gpl-%{version}-src
-%patch0 -p1
+%setup -q -n mysql-workbench-community-%{version}-src
+%apply_patches
+
+# make cmake happy with mariadb
+sed -i '/^find_package(MySQL /c find_package(MySQL REQUIRED)' \
+        CMakeLists.txt
+
 
 sed -i -e 's:ifconfig:/sbin/ifconfig:' plugins/wb.admin/backend/wb_server_control.py || die
 
@@ -88,11 +91,8 @@ sed -i -e 's:ifconfig:/sbin/ifconfig:' plugins/wb.admin/backend/wb_server_contro
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 %build
-NOCONFIGURE=yes ./autogen.sh
-%configure2_5x \
-	--disable-static \
-	--disable-debug
-
+export CXXFLAGS="%{optflags} -fpermissive -std=c++11"
+%cmake
 %make
 
 %install
