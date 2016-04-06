@@ -3,14 +3,10 @@
 
 %define build_java 0
 
-# Keep internal libraries private
-%define __noautoprov 'devel(.*)|_cairo\\.so(.*)|_mforms\\.so(.*)|db(.*)\\.so(.*)|forms\\.grt\\.so(.*)|libantlr3c_wb(.*)|libcdbc\\.so(.*)|libgrt\\.so(.*)|liblinux_utilities\\.so(.*)|libmdcanvas\\.so(.*)|libmdcanvasgtk\\.so(.*)|libmforms\\.so(.*)|libmysqlparser\\.so(.*)|libsqlide\\.so(.*)|libsqlparser\\.so(.*)|libvsqlitepp\\.so(.*)|libwb(.*)\\.so(.*)|wb(.*)\\.so(.*)'
-%define __noautoreq '_cairo\\.so(.*)|_mforms\\.so(.*)|db(.*)\\.so(.*)|forms\\.grt\\.so(.*)|libantlr3c_wb(.*)|libcdbc\\.so(.*)|libgrt\\.so(.*)|liblinux_utilities\\.so(.*)|libmdcanvas\\.so(.*)|libmdcanvasgtk\\.so(.*)|libmforms\\.so(.*)|libmysqlparser\\.so(.*)|libsqlide\\.so(.*)|libsqlparser\\.so(.*)|libvsqlitepp\\.so(.*)|libwb(.*)\\.so(.*)|wb(.*)\\.so(.*)'
-
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Version:	6.3.6
-Release:	1
+Release:	2
 License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
@@ -22,10 +18,13 @@ BuildRequires:	cmake
 BuildRequires:	gettext
 BuildRequires:	imagemagick
 BuildRequires:	boost-devel
+BuildRequires:	gdal-devel
 BuildRequires:	gettext-devel
 BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	readline-devel
+BuildRequires:	swig
+BuildRequires:	tinyxml-devel
 BuildRequires:	pkgconfig(cairo)
 BuildRequires:	pkgconfig(cairomm-1.0)
 BuildRequires:	pkgconfig(expat)
@@ -67,6 +66,7 @@ BuildRequires:	jpackage-utils
 %endif
 BuildRequires:	vsqlite++-devel
 
+Requires:	mariadb-client
 Requires:	python-paramiko
 Requires:	python-pexpect
 
@@ -85,8 +85,6 @@ least 16MB of memory.
 sed -i '/^find_package(MySQL /c find_package(MySQL REQUIRED)' \
         CMakeLists.txt
 
-
-sed -i -e 's:ifconfig:/sbin/ifconfig:' plugins/wb.admin/backend/wb_server_control.py || die
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
@@ -108,6 +106,7 @@ export MWB_LIBRARY_DIR="%{_datadir}/mysql-workbench/libraries"
 export MWB_MODULE_DIR="%{_libdir}/mysql-workbench/modules"
 export MWB_PLUGIN_DIR="%{_libdir}/mysql-workbench/plugins"
 export DBC_DRIVER_PATH="%{_libdir}/mysql-workbench"
+export MWB_BINARIES_DIR="%{_bindir}"
 %{_bindir}/mysql-workbench-bin \$*
 EOF
 
