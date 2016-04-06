@@ -11,6 +11,7 @@ License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
 Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-%{version}-src.tar.gz
+Source100:	%{name}.rpmlintrc
 Patch1:		0013-mysql-workbench-no-json.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
