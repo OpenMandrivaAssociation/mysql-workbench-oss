@@ -26,6 +26,8 @@ BuildRequires:	gettext-devel
 BuildRequires:	mysql-devel >= 5.0
 BuildRequires:	mysql-connector-c++-devel
 BuildRequires:	readline-devel
+BuildRequires:	swig
+BuildRequires:	tinyxml-devel
 BuildRequires:	pkgconfig(cairo)
 BuildRequires:	pkgconfig(cairomm-1.0)
 BuildRequires:	pkgconfig(expat)
