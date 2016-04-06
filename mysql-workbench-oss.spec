@@ -93,7 +93,7 @@ sed -i '/^FIND_PROGRAM(PYTHON_EXEC /c FIND_PROGRAM(PYTHON_EXEC "python2")' \
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
 
 %build
-export CXXFLAGS="%{optflags} -fpermissive "
+export CXXFLAGS="%{optflags} -fpermissive -std=c++11"
 %cmake
 %make
 
