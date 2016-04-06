@@ -6,7 +6,7 @@
 Summary:	Extensible modeling tool for MySQL 5.x
 Name:		mysql-workbench-oss
 Version:	6.3.6
-Release:	2
+Release:	3
 License:	GPLv2 and LGPLv2
 Group:		Databases
 Url:		http://dev.mysql.com/downloads/workbench/
@@ -67,8 +67,8 @@ BuildRequires:	jpackage-utils
 BuildRequires:	vsqlite++-devel
 
 Requires:	mariadb-client
-Requires:	python-paramiko
-Requires:	python-pexpect
+Requires:	python2-paramiko
+Requires:	python2-pexpect
 
 %description
 MySQL Workbench is modeling tool that allows you to design and generate MySQL
@@ -85,6 +85,9 @@ least 16MB of memory.
 sed -i '/^find_package(MySQL /c find_package(MySQL REQUIRED)' \
         CMakeLists.txt
 
+# we need python 2.x
+sed -i '/^FIND_PROGRAM(PYTHON_EXEC /c FIND_PROGRAM(PYTHON_EXEC "python2")' \
+	CMakeLists.txt
 
 # lib64 fix
 perl -pi -e "s|/lib/|/%{_lib}/|g" frontend/linux/workbench/program.cpp
