@@ -18,6 +18,7 @@ Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-
 Patch1:		0013-mysql-workbench-no-json.patch
 Obsoletes:	mysql-workbench < 5.1.6
 Provides:	mysql-workbench = %{EVRD}
+BuildRequires:	cmake
 BuildRequires:	gettext
 BuildRequires:	imagemagick
 BuildRequires:	boost-devel
@@ -40,7 +41,6 @@ BuildRequires:	pkgconfig(gnome-keyring-1)
 BuildRequires:	pkgconfig(gtk+-2.0)
 BuildRequires:	pkgconfig(gtkmm-2.4)
 BuildRequires:	pkgconfig(libctemplate)
-BuildRequires:	pkgconfig(libglade-2.0)
 BuildRequires:	pkgconfig(libiodbc)
 BuildRequires:	pkgconfig(libpcre)
 BuildRequires:	pkgconfig(libpng)
