@@ -80,7 +80,7 @@ least 16MB of memory.
 
 %prep
 %setup -q -n mysql-workbench-community-%{version}-src
-%apply_patches
+%autopatch -p1
 
 # make cmake happy with mariadb
 sed -i '/^find_package(MySQL /c find_package(MySQL REQUIRED)' \
