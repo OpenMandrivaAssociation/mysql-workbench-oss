@@ -9,7 +9,7 @@ Version:	6.3.6
 Release:	3
 License:	GPLv2 and LGPLv2
 Group:		Databases
-Url:		http://dev.mysql.com/downloads/workbench/
+Url:		https://dev.mysql.com/downloads/workbench/
 Source0:	http://cdn.mysql.com/Downloads/MySQLGUITools/mysql-workbench-community-%{version}-src.tar.gz
 Source100:	%{name}.rpmlintrc
 Patch1:		0013-mysql-workbench-no-json.patch
